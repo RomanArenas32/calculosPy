@@ -1,5 +1,4 @@
 import openpyxl
-import os
 import locale
 import glob
 import datetime

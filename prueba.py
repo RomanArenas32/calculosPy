@@ -5,27 +5,18 @@ import glob
 import datetime
 
 def monedaAFlotante(valor):
-    # Verificar si el valor es un número (int o float) y retornarlo tal cual sin aplicar strip()
     if isinstance(valor, (int, float)):
         return valor
-    
-    # Si el valor no es un número, intentar convertirlo a flotante
     try:
         return locale.atof(valor.strip("$"))
-    except ValueError:
-        # Si no se puede convertir a flotante, retornar 0 o cualquier otro valor predeterminado
-        return 0  # O puedes retornar None si prefieres indicar que el valor es inválido
-
-
-def formatearNumero(numero):
-    return locale.format_string("%.2f", numero, grouping=True)
+    except ValueError: 
+        return 0  
 
 inicio = datetime.datetime.now()
 print('Fecha y hora de inicio de la exportación: ', inicio)
 
-modoDebug = False
+
 datosExportar = []
-locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 file_path = "C:\\Users\\PC06\\Desktop\\calculosPy\\xls_python.xlsx"
 
 for xlsxFile in glob.glob(file_path):
@@ -33,7 +24,6 @@ for xlsxFile in glob.glob(file_path):
     wb = openpyxl.load_workbook(xlsxFile)
     sheet = wb.active
 
-    # Iterar sobre todas las filas en el archivo Excel
     for row in sheet.iter_rows(min_row=2, values_only=True):
         escuelaNumero = int(row[0])
         valSubvencionBase = monedaAFlotante(row[1])
@@ -52,7 +42,6 @@ for xlsxFile in glob.glob(file_path):
         valTotalDescuentos = monedaAFlotante(row[24])
         ReliquidaciónPeriodoMarzoAMayo = monedaAFlotante(row[25])
 
-        # Resto del código sin cambios...
 
         datosExportar.append([escuelaNumero, "4-1-1-01-10", "Subvención general", (valSubvencionBase+valIncrementoZona-valMontoPie-valTotalDescuentos+ReliquidaciónPeriodoMarzoAMayo)])
         datosExportar.append([escuelaNumero, "4-1-1-01-11", "Subvención internado", (valInternado)])
@@ -67,19 +56,16 @@ for xlsxFile in glob.glob(file_path):
 excelFile = "resultados.xlsx"
 print("Exportando a ", excelFile)
 
-# Crear un nuevo archivo Excel
 wb = openpyxl.Workbook()
 sheet = wb.active
 sheet.title = 'ResultadosExpo'
 for row in datosExportar:
     sheet.append(row)
 
-# Formato con 2 decimales para la columna del monto
 fmtNumero = openpyxl.styles.NamedStyle(name='custom_number_format', number_format='#,##0.00')
 for cell in sheet["D"]:
     cell.style = fmtNumero
 
-# Ajustar el ancho de las columnas
 sheet.column_dimensions['A'].width = 15
 sheet.column_dimensions['B'].width = 40
 sheet.column_dimensions['C'].width = 40

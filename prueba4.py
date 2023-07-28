@@ -16,15 +16,13 @@ def monedaAFlotante(valor):
         # Si no se puede convertir a flotante, retornar 0 o cualquier otro valor predeterminado
         return 0
 
-def formatearNumero(numero):
-    return locale.format_string("%.2f", numero, grouping=True)
+
 
 inicio = datetime.datetime.now()
 print('Fecha y hora de inicio de la exportación: ', inicio)
 
-modoDebug = False
+
 datosExportar = []
-locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 file_path = "C:\\Users\\PC06\\Desktop\\calculosPy\\Sostenedor_Particular_Detalle_Transferido_para_el_Mes_por_Establecimiento_Sostenedor_82733800.xlsx"
 
 # Diccionario para asociar conseptoPago con el número correspondiente
